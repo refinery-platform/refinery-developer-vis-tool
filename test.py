@@ -26,7 +26,7 @@ class ContainerTest(unittest.TestCase):
     def test_home_page(self):
         response = requests.get('http://localhost:{PORT}'.format(**os.environ))
         self.assertEqual(response.status_code, 200)
-        self.assertRegexpMatches(response.text, r'Refinery Tool Launch Data')
+        self.assertRegexpMatches(response.text, r'Tool Launch Data')
 
     def test_input_data_exists(self):
         response = requests.get(
