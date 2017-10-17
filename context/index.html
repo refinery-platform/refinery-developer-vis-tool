@@ -1,0 +1,32 @@
+<html>
+  <body>
+    <h1>Refinery Tool Launch Data:</h1>
+    <pre>
+      <code id="json">
+      <br>
+      </code>
+    </pre>
+    <script>
+    function loadJSON(callback) {   
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', '/data/input.json', true);
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                callback(xobj.responseText);
+              }
+        };
+        xobj.send(null);  
+    }
+    
+    (function init() {
+      loadJSON(function(response) {
+      // Parse JSON string into object
+        var jsonData = JSON.parse(response);
+        document.getElementById("json").innerHTML = JSON.stringify(jsonData, undefined, 2);
+      });
+    })();
+    </script>
+    </body>
+</html>
