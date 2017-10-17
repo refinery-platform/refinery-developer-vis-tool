@@ -10,7 +10,10 @@ This docker image runs an nginx server and expects one to populate `/usr/share/n
 🐳
 `docker pull scottx611x/refinery-developer-vis-tool`
 
-# Running tests
+## Running the conatiner
+See [build_run_test.sh](https://github.com/refinery-platform/docker_igv_js/blob/master/build_run_test.sh) for an idea of how to properly run this container.
+
+## Running tests
 `sh /build_run_test.sh`
 
 Some ouput data show be displayed with your tests results and where to access your running container:
