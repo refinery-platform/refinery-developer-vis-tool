@@ -9,7 +9,7 @@ env:
     - secure: "I8PVi31OaUVFPVhpHjocDqwmranx+0XzFImX8NeWvq2ACIuDJgozXEqHF/WRVVYn+i3ueU4VxMaS+0VE5/tPROEOaL1fIy6kjhnWIGyQtYq+QWRXsAspTR3mGbj/QSDmD5Wr8NwkR8QJqvM/TejKrl+ZZM9mIY9Hqwg77ssVXIZM411fJccbYG6t7ieffVbRR1fBc+YTJaJ9Jyv0HHTCWnJ8sqiJ8D0XU8Pc/A8wlc6WZPywP+Zom6aMkewLP2Kq8RLhcx/RO/+VDjKW8lOP9RZ15SJ3IZZ47cbw7BOFTDJXoTC4wMVaAjcLsI/g3sSkpRXmhNpsydp9FA4Mt7Vv5q6Qc+kdF6SfmK95NQ1VBDmx19dFBTXq+JAlm1UxetqU5hqJ8+00zIckcFGcU+D/XmTaXrgfnzTwFAAz4LHcdo/ayrgss6w0g+OAvOUoJlqVBX7MiD2BwSQQd7YYIYaKW6LkvRQWphjeSvXz6nlxgpdR0kDL+FwzsTxXUryhslUdLSFM1u/zbMopsCmsurXN0oqa9ypV9qhfmxfC77ktGFSFLurJz7egQMjlxPLoeDFF+IDp68HfUSzrITQ/geb/7tOTwCX5gEwAvyBhbxITRSGNEsnYNz3BsHwLuQUn9JpCnnWVnVds5IwmjCGmMMMpU8jZs5e57p84MAe7bqSBC6U="
 
 script:
-  - ./build_run_test.sh
+  - sudo ./build_run_test.sh
 
 after_success:
   - IMAGE=`sudo docker ps --latest --format '{{ .Image }}'` # TODO: with more containers, can't rely on ordering
