@@ -1,23 +1,18 @@
-# Docker on Travis requires sudo.
 sudo: required
 
 install:
-  # Docker 1.13 adds "--cache-from" which really speeds up our Travis builds.
-  # Travis is currently several versions behind: When/if they catch up,
-  # this can all go away, and we can stop sudoing docker.
-  - sudo apt-get install libapparmor1
-  - DEB=docker-engine_1.13.0-0~ubuntu-precise_amd64.deb
-  - wget https://apt.dockerproject.org/repo/pool/main/d/docker-engine/$DEB
-  - sudo dpkg -i $DEB
-  - sudo docker --version
+  - sudo pip install -r requirements.txt
 
-  - sudo pip install -r requirements.txt # for latest.py
+env:
+  global:
+    - secure: "ful7Slr2TLEN7S3gRr+GQVXxMloqAisRHXhzkxBcZmZibc4YjvRruGw7sjR3IKiNU7Kh1Pb/pp7AC71vt2+zJXyuulED2W8NaXi+ignQ4xPaPGPSOhksF3ezY8Vs2YSPqgDIk75wDzXsUcJnz+B/yDjKPPDPQYXluUU+/ShLaKasInttP68W86GzkHIKsVSuf3XL2tzzZVoKKlaZ1fzWHFXAeiUt2d/g1g5ciE+howrJKhdngr05XZIDZZI4nKF2fPnVkepcY+leeiYHZsBwMhHerEe/vIjUzbbzk0jRNdPGWCHo7EEExQGdNlvQgSaXrEAcmAVZTxt1CrvARzsXOCrr3gD2lcCbjWm0tTg2PWFF5rYvo4G8g71jV0SBnUO0H6DHof9goM1t5/rOoZ18vmEjZKJPaCIacOJyp+x3YJoftO0SJdarRvbs4WzK8p99uDMigiPcM3mep2rvgjSf0QUxlF/EuQv7rq4q0ty2WWMvTRX0+sn8M3fKI44DjptYll/xTM81ONdqT7Cq38vhR9dmWOtQaxgmpJl6xrYZlSh30Fpurab84DdvmqVynUFUWv0VHRTnzY6HamJ3BhV+6gt4fg2AGc85S+aP+67PzXjfpYQggTffLhHlyLoxjeK93JbwFcMop1J3czHX2/4mbDFOGgZKGK/Mv8TowlPrXNk="
+    - secure: "I8PVi31OaUVFPVhpHjocDqwmranx+0XzFImX8NeWvq2ACIuDJgozXEqHF/WRVVYn+i3ueU4VxMaS+0VE5/tPROEOaL1fIy6kjhnWIGyQtYq+QWRXsAspTR3mGbj/QSDmD5Wr8NwkR8QJqvM/TejKrl+ZZM9mIY9Hqwg77ssVXIZM411fJccbYG6t7ieffVbRR1fBc+YTJaJ9Jyv0HHTCWnJ8sqiJ8D0XU8Pc/A8wlc6WZPywP+Zom6aMkewLP2Kq8RLhcx/RO/+VDjKW8lOP9RZ15SJ3IZZ47cbw7BOFTDJXoTC4wMVaAjcLsI/g3sSkpRXmhNpsydp9FA4Mt7Vv5q6Qc+kdF6SfmK95NQ1VBDmx19dFBTXq+JAlm1UxetqU5hqJ8+00zIckcFGcU+D/XmTaXrgfnzTwFAAz4LHcdo/ayrgss6w0g+OAvOUoJlqVBX7MiD2BwSQQd7YYIYaKW6LkvRQWphjeSvXz6nlxgpdR0kDL+FwzsTxXUryhslUdLSFM1u/zbMopsCmsurXN0oqa9ypV9qhfmxfC77ktGFSFLurJz7egQMjlxPLoeDFF+IDp68HfUSzrITQ/geb/7tOTwCX5gEwAvyBhbxITRSGNEsnYNz3BsHwLuQUn9JpCnnWVnVds5IwmjCGmMMMpU8jZs5e57p84MAe7bqSBC6U="
 
 script:
-  - sudo ./test_runner.sh
+  - source define_repo.sh
+  - sudo ./build_run_test.sh
 
 after_success:
-  - REPO=scottx611x/refinery-higlass-docker
   - IMAGE=`sudo docker ps --latest --format '{{ .Image }}'` # TODO: with more containers, can't rely on ordering
   - tag_push() { echo "Tagging into $2"; sudo docker tag $1 $2; sudo docker push $2; }
 
@@ -27,7 +22,6 @@ after_success:
   - >
       if [ "$TRAVIS_EVENT_TYPE" == "pull_request" ]; then
         echo "PR!";
-
         BRANCH=`echo ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} | perl -pne 'chomp;s{.*/}{};s/\W/-/g'`;
         tag_push $IMAGE $REPO:$BRANCH;
         tag_push $IMAGE $REPO:latest-pr;
@@ -38,4 +32,3 @@ after_success:
         tag_push $IMAGE $REPO:$TRAVIS_TAG;
         tag_push $IMAGE $REPO:latest;
       fi
-

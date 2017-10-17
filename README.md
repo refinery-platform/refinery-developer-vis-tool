@@ -1,6 +1,5 @@
-# [refinery-higlass-docker](https://hub.docker.com/r/scottx611x/refinery-higlass-docker/) [![Build Status](https://travis-ci.org/scottx611x/refinery-higlass-docker.svg?branch=master)](https://travis-ci.org/scottx611x/refinery-higlass-docker)
-"Refinery-ified" flavor of the higlass-docker (https://github.com/hms-dbmi/higlass-docker/) project
+# [refinery-developer-vis-tool](https://hub.docker.com/r/scottx611x/refinery-developer-vis-tool/) [![Build Status](https://travis-ci.org/scottx611x/refinery-developer-vis-tool.svg?branch=master)](https://travis-ci.org/scottx611x/refinery-developer-vis-tool)
 
 🐳
-```docker pull scottx611x/refinery-higlass-docker```
+```docker pull scottx611x/refinery-developer-vis-tool```
 

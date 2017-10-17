@@ -1,3 +1,4 @@
 {
-  "file_relationships": ["https://s3.amazonaws.com/pkerp/public/dixon2012-h1hesc-hindiii-allreps-filtered.1000kb.multires.cool"]
+  "data": "hello-world",
+  "more-data": "more-hello-world"
 }
