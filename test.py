@@ -34,11 +34,6 @@ class ContainerTest(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_input_data_displayed(self):
-        response = requests.get('http://localhost:{PORT}'.format(**os.environ))
-        self.assertEqual(response.status_code, 200)
-        self.assertRegexpMatches(response.text, r'hello-world')
-
 if __name__ == '__main__':
     os.environ['NAME'] = sys.argv[1]
 
