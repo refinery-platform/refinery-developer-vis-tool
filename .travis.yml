@@ -10,7 +10,7 @@ env:
 
 script:
   - source define_repo.sh
-  - sudo ./build_run_test.sh
+  - sudo sh build_run_test.sh
 
 after_success:
   - IMAGE=`sudo docker ps --latest --format '{{ .Image }}'` # TODO: with more containers, can't rely on ordering
