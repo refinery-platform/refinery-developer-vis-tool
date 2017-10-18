@@ -18,7 +18,7 @@ See [build_run_test.sh](https://github.com/scottx611x/refinery-developer-vis-too
 ## Running tests
 `sh /build_run_test.sh`
 
-Some ouput data show be displayed with your tests results and where to access your running container:
+Some ouput data should be displayed with your test results as well as where to access your running container:
 ```
 test_home_page (__main__.ContainerTest) ... ok
 test_input_data_exists (__main__.ContainerTest) ... ok
