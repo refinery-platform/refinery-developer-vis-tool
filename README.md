@@ -3,7 +3,7 @@ A basic Refinery-compatible visualization tool to aid prospective Refinery Visua
 
 This docker image runs an nginx server and expects one to populate `/usr/share/nginx/html/data` with a valid JSON file called: `input.json`. Whatever information is inside of `/usr/share/nginx/html/data/input.json` is displayed in a webpage like so:
 
-![screen shot 2017-10-18 at 10 11 14 am](https://user-images.githubusercontent.com/5629547/31723398-bac2030a-b3ec-11e7-9cdc-30bb1adb4979.png)
+<img width="1130" alt="screen shot 2017-10-17 at 4 21 19 pm" src="https://user-images.githubusercontent.com/5629547/31687440-450d943e-b357-11e7-9ba3-3d7500cf8f37.png">
 
 
 
