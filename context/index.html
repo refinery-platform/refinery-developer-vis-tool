@@ -1,46 +1,28 @@
 <html>
-  <script src="https://cdn.jsdelivr.net/npm/renderjson@1.3.1/renderjson.min.js"></script>
-  <style>
-    body {
-      background-color: gray;
-    }
-    h1 {
-      color: white;
-    }
-    .renderjson a              { text-decoration: none; }
-    .renderjson .disclosure    { color: purple; font-size: 150%; }
-    .renderjson .syntax        { color: grey; }
-    .renderjson .string        { color: yellow; }
-    .renderjson .number        { color: cyan; }
-    .renderjson .boolean       { color: plum; }
-    .renderjson .key           { color: lightblue; }
-    .renderjson .keyword       { color: lightgoldenrodyellow; }
-    .renderjson .object.syntax { color: lightseagreen; }
-    .renderjson .array.syntax  { color: lightsalmon; }
-  </style>
   <body>
     <h1>Tool Launch Data:</h1>
-    <div id="json"></div>
-    
+    <pre id="json"></pre>
     <script>
-      function loadJSON(callback) {   
-          var xobj = new XMLHttpRequest();
-          xobj.overrideMimeType("application/json");
-          xobj.open('GET', './data/input.json', true);
-          xobj.onreadystatechange = function () {
-              if (xobj.readyState == 4 && xobj.status == "200") {
-                  // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-                  callback(xobj.responseText);
-                }
-          };
-          xobj.send(null);  
-      }
-      
-      (function init() {
-        loadJSON(function(response) {
-          document.getElementById("json").appendChild(renderjson(JSON.parse(response)));
-        });
-      })();
+    function loadJSON(callback) {   
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', './data/input.json', true);
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                callback(xobj.responseText);
+              }
+        };
+        xobj.send(null);  
+    }
+    
+    (function init() {
+      loadJSON(function(response) {
+      // Parse JSON string into object
+        var jsonData = JSON.parse(response);
+        document.getElementById("json").innerHTML = JSON.stringify(jsonData, undefined, 2);
+      });
+    })();
     </script>
-  </body>
+    </body>
 </html>
