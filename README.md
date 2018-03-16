@@ -15,6 +15,7 @@ Whatever information is inside of `/usr/src/app/input.json` is displayed in a we
 See [build_run_test.sh](https://github.com/scottx611x/refinery-developer-vis-tool/blob/master/build_run_test.sh) for an idea of how to properly run this container.
 
 ## Running tests
+`pip install -r requirements.txt`
 `./build_run_test.sh`
 
 Some ouput data should be displayed with your test results as well as where to access your running container:
