@@ -1,4 +1,6 @@
-FROM nginx:1.10.3-alpine
+FROM python:3.6-onbuild
 
-COPY index.html /usr/share/nginx/html/
-VOLUME /usr/share/nginx/html/data
+COPY index.html ./
+COPY on_startup.py ./
+
+CMD ["python", "on_startup.py"]
