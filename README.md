@@ -2,16 +2,14 @@
 A basic Refinery-compatible visualization tool to aid prospective Refinery VisualizationTool developers.
 
 This docker image runs simple webserver using python and expects one to populate `/usr/src/app` with a valid JSON file called: `input.json`. 
-This is done by providing a url to the container that points to valid JSON. See [build_run_test.sh](https://github.com/scottx611x/refinery-developer-vis-tool/blob/master/build_run_test.sh#L11)
+This is done by providing a url to the container that points to valid JSON. 
+  - See [build_run_test.sh](https://github.com/scottx611x/refinery-developer-vis-tool/blob/master/build_run_test.sh#L11) for an example.
+  
 Whatever information is inside of `/usr/src/app/input.json` is displayed in a webpage like so:
 
 <img width="1130" alt="screen shot 2017-10-17 at 4 21 19 pm" src="https://user-images.githubusercontent.com/5629547/31687440-450d943e-b357-11e7-9ba3-3d7500cf8f37.png">
 
-
-
-
-🐳
-`docker pull scottx611x/refinery-developer-vis-tool`
+🐳 `docker pull scottx611x/refinery-developer-vis-tool`
 
 ## Running the conatiner
 See [build_run_test.sh](https://github.com/scottx611x/refinery-developer-vis-tool/blob/master/build_run_test.sh) for an idea of how to properly run this container.
