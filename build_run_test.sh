@@ -12,7 +12,6 @@ docker run --env INPUT_JSON_URL=https://api.github.com/users/scottx611x/repos \
            --detach \
            --name $NAME \
            --publish 80 \
-           --volume $DATA_DIR:/usr/share/nginx/html/data \
            $NAME
 
 python test.py $NAME
