@@ -8,12 +8,8 @@ docker pull $REPO
 docker build --tag $NAME \
              --cache-from $REPO \
              context
-
-DATA_DIR=/tmp/refinery-developer-vis-tool_`date +"%Y-%m-%d_%H-%M-%S"`
-
-cp -a test-data $DATA_DIR
-
-docker run --detach \
+docker run --env INPUT_JSON_URL=https://api.github.com/users/scottx611x/repos \
+           --detach \
            --name $NAME \
            --publish 80 \
            --volume $DATA_DIR:/usr/share/nginx/html/data \
