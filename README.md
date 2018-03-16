@@ -1,4 +1,4 @@
-# [refinery-developer-vis-tool](https://hub.docker.com/r/scottx611x/refinery-developer-vis-tool/) [![Build Status](https://travis-ci.org/scottx611x/refinery-developer-vis-tool.svg?branch=master)](https://travis-ci.org/scottx611x/refinery-developer-vis-tool)
+# [refinery-developer-vis-tool](https://hub.docker.com/r/scottx611x/refinery-developer-vis-tool/) [![Build Status](https://travis-ci.org/refinery-platform/refinery-developer-vis-tool.svg?branch=master)](https://travis-ci.org/refinery-platform/refinery-developer-vis-tool)
 A basic Refinery-compatible visualization tool to aid prospective Refinery VisualizationTool developers.
 
 This docker image runs simple webserver using python and expects one to populate `/usr/src/app` with a valid JSON file called: `input.json`. 
