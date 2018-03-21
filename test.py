@@ -1,7 +1,5 @@
 import unittest
-import os
 import subprocess
-import time
 import requests
 import sys
 import re
@@ -20,12 +18,10 @@ class ContainerTest(unittest.TestCase):
         port = get_port()
         self.base = 'http://localhost:' + port
 
-        for i in range(5):
-            if 0 == subprocess.call('curl --fail --silent ' + self.base + ' > /dev/null', shell=True):
-                return
-            print('Still waiting for server...')
-            time.sleep(1)
-        self.fail('Server never came up')
+        # This is cleaner than a retry loop... but even this might not be needed?
+        # session = requests.Session()
+        # adapter = requests.adapters.HTTPAdapter(max_retries=3)  # default 0
+        # session.mount('http://', adapter)
 
     def test_home_page(self):
         response = requests.get(self.base)
