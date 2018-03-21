@@ -4,18 +4,22 @@ import subprocess
 import time
 import requests
 import sys
+import re
 
+
+def get_port():
+    # Looks up port number for container name given in argv
+    port_mapping = subprocess.check_output(
+        ['docker', 'port', sys.argv[1]]
+    ).decode('utf-8').strip()
+    return re.search(':(\d+)', port_mapping).group(1)
 
 class ContainerTest(unittest.TestCase):
 
     def setUp(self):
-        # self.suffix = os.environ['SUFFIX']
-        # self.stamp = os.environ['STAMP']
-        command = "docker port {NAME} | perl -pne 's/.*://'".format(
-            **os.environ)
-        os.environ['PORT'] = subprocess.check_output(
-            command, shell=True).strip().decode('utf-8')
-        self.base = 'http://localhost:{PORT}'.format(**os.environ)
+        port = get_port()
+        self.base = 'http://localhost:' + port
+
         for i in range(5):
             if 0 == subprocess.call('curl --fail --silent ' + self.base + ' > /dev/null', shell=True):
                 return
@@ -44,14 +48,12 @@ class ContainerTest(unittest.TestCase):
         self.assertIn('"Scott"', response.text)
 
 if __name__ == '__main__':
-    os.environ['NAME'] = sys.argv[1]
-
     suite = unittest.TestLoader().loadTestsFromTestCase(ContainerTest)
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     print('''
-browse:   http://localhost:{PORT}/
+browse:   http://localhost:{}/
 clean up: docker ps -qa | xargs docker stop | xargs docker rm
-    '''.format(**os.environ))
+    '''.format(get_port()))
     if result.wasSuccessful():
         print('PASS!')
     else:
