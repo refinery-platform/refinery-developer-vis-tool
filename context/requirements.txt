@@ -1,1 +1,2 @@
+# The python:3.6-onbuild base image copies this and installs dependencies.
 requests

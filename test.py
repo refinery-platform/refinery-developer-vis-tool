@@ -30,7 +30,7 @@ class ContainerTest(unittest.TestCase):
 
     def test_input_data_exists(self):
         response = requests.get(
-            'http://localhost:{PORT}/input.json'.format(**os.environ)
+            'http://localhost:{PORT}/data/input.json'.format(**os.environ)
         )
         self.assertEqual(response.status_code, 200)
 

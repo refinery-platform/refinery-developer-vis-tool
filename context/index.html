@@ -1,28 +1,52 @@
 <html>
   <body>
-    <h1>Tool Launch Data:</h1>
-    <pre id="json"></pre>
+    <h1>Tool Launch Data</h1>
+    <p>Note: In real life, an application would only supply input via
+    one of these nodes, and a given visualization might not support all modes,
+    but for a demonstration, it's useful to see them all.</p>
+
+    <h2>Mounted input.json</h2>
+    <p>Works well locally, but if Docker host is remote requires ssh access.</p>
+    <pre id="input_json">not loaded</pre>
+
+    <h2>JSON in environment variable</h2>
+    <p>Works local and remote, but there is a limit to the size of the environment,
+    typically around 2M.</p>
+    <pre id="envvar_value">not loaded</pre>
+
+    <h2>JSON in environment variable URL</h2>
+    <p>Works local and remote, and no real size limit, but the user needs
+    to be able to create new URLs that point to the input data.</p>
+    <pre id="envvar_url">not loaded</pre>
+
     <script>
-    function loadJSON(callback) {   
+      function loadJSON(filename, callback) {
         var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");
-        xobj.open('GET', './input.json', true);
+        xobj.open('GET', './' + filename, true);
         xobj.onreadystatechange = function () {
-            if (xobj.readyState == 4 && xobj.status == "200") {
-                // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-                callback(xobj.responseText);
-              }
+          if (xobj.readyState == 4 && xobj.status == "200") {
+            // Anonymous callback needed since .open will NOT return
+            // a value but simply returns undefined in asynchronous mode
+            callback(xobj.responseText);
+          }
         };
-        xobj.send(null);  
-    }
-    
-    (function init() {
-      loadJSON(function(response) {
-      // Parse JSON string into object
-        var jsonData = JSON.parse(response);
-        document.getElementById("json").innerHTML = JSON.stringify(jsonData, undefined, 2);
-      });
-    })();
+        xobj.send(null);
+      }
+
+      function renderJSON(filename, id) {
+        loadJSON(filename, function (response) {
+          // Parse JSON string into object
+          var jsonData = JSON.parse(response);
+          document.getElementById(id).innerHTML = JSON.stringify(jsonData, undefined, 2);
+        })
+      }
+
+      (function () {
+        renderJSON('data/input.json', 'input_json');
+        renderJSON('envvar_value.json', 'envvar_value');
+        renderJSON('envvar_url.json', 'envvar_url');
+      })();
     </script>
     </body>
 </html>
