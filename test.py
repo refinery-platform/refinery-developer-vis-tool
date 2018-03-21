@@ -18,10 +18,10 @@ class ContainerTest(unittest.TestCase):
         port = get_port()
         self.base = 'http://localhost:' + port
 
-        # This is cleaner than a retry loop... but even this might not be needed?
-        # session = requests.Session()
-        # adapter = requests.adapters.HTTPAdapter(max_retries=3)  # default 0
-        # session.mount('http://', adapter)
+        # Needed on Travis, but not locally?
+        session = requests.Session()
+        adapter = requests.adapters.HTTPAdapter(max_retries=10)  # default 0
+        session.mount('http://', adapter)
 
     def test_home_page(self):
         response = requests.get(self.base)
