@@ -4,13 +4,13 @@ set -e
 
 source define_repo.sh
 
-STAMP=`date +"%Y-%m-%d_%H-%M-%S"`
-UNIQ_NAME=$NAME$STAMP
 docker pull $REPO
-docker build --tag $UNIQ_NAME \
+docker build --tag $NAME \
              --cache-from $REPO \
              context
 
+STAMP=`date +"%Y-%m-%d_%H-%M-%S"`
+UNIQ_NAME=$NAME$STAMP
 DATA_DIR=/tmp/refinery-developer-vis-tool_$STAMP
 mkdir $DATA_DIR
 echo '{"name": "Nils", "beverage": "water?"}' > $DATA_DIR/input.json
