@@ -16,4 +16,8 @@ if __name__ =="__main__":
             requests.get(os.environ.get("INPUT_JSON_URL")).text
         )
 
+    print('envvars read')
+
     HTTPServer(('', 80), SimpleHTTPRequestHandler).serve_forever()
+
+    print('server started')

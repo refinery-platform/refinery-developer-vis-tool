@@ -3,6 +3,7 @@ import subprocess
 import requests
 import sys
 import re
+import time
 
 
 def get_port():
@@ -19,9 +20,25 @@ class ContainerTest(unittest.TestCase):
         self.base = 'http://localhost:' + port
 
         # Needed on Travis, but not locally?
-        session = requests.Session()
-        adapter = requests.adapters.HTTPAdapter(max_retries=10)  # default 0
-        session.mount('http://', adapter)
+        # session = requests.Session()
+        # adapter = requests.adapters.HTTPAdapter(max_retries=10)  # default 0
+        # session.mount('http://', adapter)
+
+        # if 0 == subprocess.call(
+        #         'curl --fail --silent ' + self.base + ' > /dev/null',
+        #         shell=True):
+        #     return
+
+        for i in range(5):
+            try:
+                requests.get(self.base)
+                break
+            except:
+                print('Still waiting for server...')
+                time.sleep(1)
+        else:
+            self.fail('Server never came up')
+
 
     def test_home_page(self):
         response = requests.get(self.base)
