@@ -26,13 +26,28 @@ class ContainerTest(unittest.TestCase):
     def test_home_page(self):
         response = requests.get('http://localhost:{PORT}'.format(**os.environ))
         self.assertEqual(response.status_code, 200)
-        self.assertRegexpMatches(response.text, r'Tool Launch Data')
+        self.assertIn('Tool Launch Data', response.text)
 
-    def test_input_data_exists(self):
+    def test_mounted_json(self):
         response = requests.get(
             'http://localhost:{PORT}/data/input.json'.format(**os.environ)
         )
         self.assertEqual(response.status_code, 200)
+        self.assertIn('"Nils"', response.text)
+
+    def test_envvar_value_json(self):
+        response = requests.get(
+            'http://localhost:{PORT}/envvar_value.json'.format(**os.environ)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('"Chuck"', response.text)
+
+    def test_envvar_url_json(self):
+        response = requests.get(
+            'http://localhost:{PORT}/envvar_url.json'.format(**os.environ)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('"Scott"', response.text)
 
 if __name__ == '__main__':
     os.environ['NAME'] = sys.argv[1]
