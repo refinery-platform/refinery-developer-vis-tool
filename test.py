@@ -16,7 +16,7 @@ class ContainerTest(unittest.TestCase):
         os.environ['PORT'] = subprocess.check_output(
             command, shell=True).strip().decode('utf-8')
         url = 'http://localhost:{PORT}/'.format(**os.environ)
-        for i in xrange(5):
+        for i in range(5):
             if 0 == subprocess.call('curl --fail --silent ' + url + ' > /dev/null', shell=True):
                 return
             print('Still waiting for server...')
