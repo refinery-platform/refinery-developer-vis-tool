@@ -10,7 +10,7 @@ docker build --tag $NAME \
              context
 
 STAMP=`date +"%Y-%m-%d_%H-%M-%S"`
-UNIQ_NAME=$NAME$STAMP
+CONTAINER_NAME=$NAME-$STAMP
 DATA_DIR=/tmp/refinery-developer-vis-tool_$STAMP
 mkdir $DATA_DIR
 echo '{"name": "Nils", "beverage": "water?"}' > $DATA_DIR/input.json
@@ -21,8 +21,11 @@ docker run --env INPUT_JSON_URL=http://data.cloud.refinery-platform.org.s3.amazo
            --env INPUT_JSON='{"name": "Chuck", "beverage": "tea"}' \
            --volume $DATA_DIR:/usr/src/app/data \
            --detach \
-           --name $UNIQ_NAME \
+           --name $CONTAINER_NAME \
            --publish 80 \
            $NAME
 
-python test.py $UNIQ_NAME
+docker ps
+docker logs $CONTAINER_NAME
+
+python test.py $CONTAINER_NAME
