@@ -4,12 +4,14 @@ set -e
 
 source define_repo.sh
 
+STAMP=`date +"%Y-%m-%d_%H-%M-%S"`
+UNIQ_NAME=$NAME$STAMP
 docker pull $REPO
-docker build --tag $NAME \
+docker build --tag $UNIQ_NAME \
              --cache-from $REPO \
              context
 
-DATA_DIR=/tmp/refinery-developer-vis-tool_`date +"%Y-%m-%d_%H-%M-%S"`
+DATA_DIR=/tmp/refinery-developer-vis-tool_$STAMP
 mkdir $DATA_DIR
 echo '{"name": "Nils", "beverage": "water?"}' > $DATA_DIR/input.json
 
@@ -19,8 +21,8 @@ docker run --env INPUT_JSON_URL=http://data.cloud.refinery-platform.org.s3.amazo
            --env INPUT_JSON='{"name": "Chuck", "beverage": "tea"}' \
            --volume $DATA_DIR:/usr/src/app/data \
            --detach \
-           --name $NAME \
+           --name $UNIQ_NAME \
            --publish 80 \
            $NAME
 
-python test.py $NAME
+python test.py $UNIQ_NAME
