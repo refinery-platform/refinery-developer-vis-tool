@@ -19,15 +19,10 @@ class ContainerTest(unittest.TestCase):
         port = get_port()
         self.base = 'http://localhost:' + port
 
-        # Needed on Travis, but not locally?
+        # TODO: This didn't work on Travis... should it?
         # session = requests.Session()
         # adapter = requests.adapters.HTTPAdapter(max_retries=10)  # default 0
         # session.mount('http://', adapter)
-
-        # if 0 == subprocess.call(
-        #         'curl --fail --silent ' + self.base + ' > /dev/null',
-        #         shell=True):
-        #     return
 
         for i in range(5):
             try:
