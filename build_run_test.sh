@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-
-set -e
+set -o verbose
+set -o errexit
+set -o nounset
 
 source define_repo.sh
 
@@ -17,15 +18,40 @@ echo '{"name": "Nils", "beverage": "water?"}' > $DATA_DIR/input.json
 
 # In real life, input would only be supplied by one mechanism,
 # but we want to test them all.
-docker run --env INPUT_JSON_URL=http://data.cloud.refinery-platform.org.s3.amazonaws.com/data/scott/sample.json \
-           --env INPUT_JSON='{"name": "Chuck", "beverage": "tea"}' \
-           --volume $DATA_DIR:/usr/src/app/data \
-           --detach \
-           --name $CONTAINER_NAME \
-           --publish 80 \
-           $NAME
+JSON='{"name": "Chuck", "beverage": "tea"}'
+URL='http://data.cloud.refinery-platform.org.s3.amazonaws.com/data/scott/sample.json'
+MOUNT="$DATA_DIR:/usr/src/app/data"
+DEFAULTS="--detach --name $CONTAINER_NAME --publish 80 $NAME"
 
-docker ps
-docker logs $CONTAINER_NAME
+#####
 
-python test.py $CONTAINER_NAME
+docker run --env INPUT_JSON_URL="$URL" \
+           --volume "$MOUNT" \
+           $DEFAULTS
+python test.py --container_name $CONTAINER_NAME --skip_envvar_value
+docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+
+#####
+
+docker run --env INPUT_JSON="$JSON" \
+           --volume "$MOUNT" \
+           $DEFAULTS
+python test.py --container_name $CONTAINER_NAME --skip_envvar_url
+docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+
+#####
+
+docker run --env INPUT_JSON="$JSON" \
+           --env INPUT_JSON_URL="$URL" \
+           $DEFAULTS
+python test.py --container_name $CONTAINER_NAME --skip_mounted
+docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+
+#####
+
+docker run --env INPUT_JSON="$JSON" \
+           --env INPUT_JSON_URL="$URL" \
+           --volume "$MOUNT" \
+           $DEFAULTS
+python test.py --container_name $CONTAINER_NAME
+# Leave the last one running for manual tests.
