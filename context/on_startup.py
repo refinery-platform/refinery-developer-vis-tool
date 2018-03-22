@@ -1,14 +1,23 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import os
-import json
 import requests
 
 if __name__ =="__main__":
-    with open("input.json", "w") as f:
+    # input.json should just be in place already, if it has been given.
+    # Using environ.get to be a little more robust against missing values.
+
+    with open("envvar_value.json", "w") as f:
         f.write(
-            json.dumps(
-                requests.get(os.environ["INPUT_JSON_URL"]).json()
-            )
+            os.environ.get("INPUT_JSON")
         )
 
+    with open("envvar_url.json", "w") as f:
+        f.write(
+            requests.get(os.environ.get("INPUT_JSON_URL")).text
+        )
+
+    print('envvars read')
+
     HTTPServer(('', 80), SimpleHTTPRequestHandler).serve_forever()
+
+    print('server started')

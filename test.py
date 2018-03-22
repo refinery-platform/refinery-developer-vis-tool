@@ -1,50 +1,67 @@
 import unittest
-import os
 import subprocess
-import time
 import requests
 import sys
+import re
+import time
 
+
+def get_port():
+    # Looks up port number for container name given in argv
+    port_mapping = subprocess.check_output(
+        ['docker', 'port', sys.argv[1]]
+    ).decode('utf-8').strip()
+    return re.search(':(\d+)', port_mapping).group(1)
 
 class ContainerTest(unittest.TestCase):
 
     def setUp(self):
-        # self.suffix = os.environ['SUFFIX']
-        # self.stamp = os.environ['STAMP']
-        command = "docker port {NAME} | perl -pne 's/.*://'".format(
-            **os.environ)
-        os.environ['PORT'] = subprocess.check_output(
-            command, shell=True).strip().decode('utf-8')
-        url = 'http://localhost:{PORT}/'.format(**os.environ)
-        for i in xrange(5):
-            if 0 == subprocess.call('curl --fail --silent ' + url + ' > /dev/null', shell=True):
-                return
-            print('Still waiting for server...')
-            time.sleep(1)
-        self.fail('Server never came up')
+        port = get_port()
+        self.base = 'http://localhost:' + port
+
+        # TODO: This didn't work on Travis... should it?
+        # session = requests.Session()
+        # adapter = requests.adapters.HTTPAdapter(max_retries=10)  # default 0
+        # session.mount('http://', adapter)
+
+        for i in range(5):
+            try:
+                requests.get(self.base)
+                break
+            except:
+                print('Still waiting for server...')
+                time.sleep(1)
+        else:
+            self.fail('Server never came up')
+
 
     def test_home_page(self):
-        response = requests.get('http://localhost:{PORT}'.format(**os.environ))
+        response = requests.get(self.base)
         self.assertEqual(response.status_code, 200)
-        self.assertRegexpMatches(response.text, r'Tool Launch Data')
+        self.assertIn('Tool Launch Data', response.text)
 
-    def test_input_data_exists(self):
-        response = requests.get(
-            'http://localhost:{PORT}/input.json'.format(**os.environ)
-        )
+    def test_mounted_json(self):
+        response = requests.get(self.base + '/data/input.json')
         self.assertEqual(response.status_code, 200)
+        self.assertIn('"Nils"', response.text)
+
+    def test_envvar_value_json(self):
+        response = requests.get(self.base + '/envvar_value.json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('"Chuck"', response.text)
+
+    def test_envvar_url_json(self):
+        response = requests.get(self.base + '/envvar_url.json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('"Scott"', response.text)
 
 if __name__ == '__main__':
-    os.environ['NAME'] = sys.argv[1]
-
     suite = unittest.TestLoader().loadTestsFromTestCase(ContainerTest)
     result = unittest.TextTestRunner(verbosity=2).run(suite)
-    lines = [
-        'browse:   http://localhost:{PORT}/',
-        'clean up: docker ps -qa | xargs docker stop | xargs docker rm'
-    ]
-    for line in lines:
-        print(line.format(**os.environ))
+    print('''
+browse:   http://localhost:{}/
+clean up: docker ps -qa | xargs docker stop | xargs docker rm
+    '''.format(get_port()))
     if result.wasSuccessful():
         print('PASS!')
     else:
