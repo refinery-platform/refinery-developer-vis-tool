@@ -7,14 +7,14 @@ if __name__ =="__main__":
     # Using environ.get to be a little more robust against missing values.
 
     with open("envvar_value.json", "w") as f:
-        f.write(
-            os.environ.get("INPUT_JSON")
-        )
+        json = os.environ.get("INPUT_JSON")
+        if json:
+            f.write(json)
 
     with open("envvar_url.json", "w") as f:
-        f.write(
-            requests.get(os.environ.get("INPUT_JSON_URL")).text
-        )
+        url = os.environ.get("INPUT_JSON_URL")
+        if url:
+            f.write(requests.get(url).text)
 
     print('envvars read')
 
