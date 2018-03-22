@@ -46,19 +46,19 @@ class ContainerTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('Tool Launch Data', response.text)
 
-    @unittest.skipIf(get_args().skip_mounted, 'skip mounted')
+    @unittest.skipIf(get_args().skip_mounted, 'CLI param skip')
     def test_mounted_json(self):
         response = requests.get(self.base + '/data/input.json')
         self.assertEqual(response.status_code, 200)
         self.assertIn('"Nils"', response.text)
 
-    @unittest.skipIf(get_args().skip_envvar_value, 'skip envvar value')
+    @unittest.skipIf(get_args().skip_envvar_value, 'CLI param skip')
     def test_envvar_value_json(self):
         response = requests.get(self.base + '/envvar_value.json')
         self.assertEqual(response.status_code, 200)
         self.assertIn('"Chuck"', response.text)
 
-    @unittest.skipIf(get_args().skip_envvar_url, 'skip envvar url')
+    @unittest.skipIf(get_args().skip_envvar_url, 'CLI param skip')
     def test_envvar_url_json(self):
         response = requests.get(self.base + '/envvar_url.json')
         self.assertEqual(response.status_code, 200)
